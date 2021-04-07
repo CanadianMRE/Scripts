@@ -34,7 +34,7 @@ local ScreenGui = Instance.new("ScreenGui")
 if syn then
 	syn.protect_gui(ScreenGui)
 end
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.Parent = game:GetService("CoreGui")
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 local MainFrame = Instance.new("Frame")
