@@ -6,6 +6,7 @@ local hidden = false
 local stanim = player.Character.CurrentStamina
 local keybindGui
 local keybindWorkout
+local fatigueCheck = true
 local dragging
 local dragInput
 local dragStart
@@ -34,61 +35,92 @@ local ScreenGui = Instance.new("ScreenGui")
 if syn then
 	syn.protect_gui(ScreenGui)
 end
+local MainFrame = Instance.new("Frame")
+if syn then
+	syn.protect_gui(MainFrame)
+end
+local AutoEat = Instance.new("TextButton")
+if syn then
+	syn.protect_gui(AutoEat)
+end
+local ToggleGuiKeybind = Instance.new("TextButton")
+if syn then
+	syn.protect_gui(ToggleGuiKeybind)
+end
+local OnOffKeybind = Instance.new("TextButton")
+if syn then
+	syn.protect_gui(OnOffKeybind)
+end
+local KeybindsTitle = Instance.new("TextLabel")
+if syn then
+	syn.protect_gui(KeybindsTitle)
+end
+local ControlsTitle = Instance.new("TextLabel")
+if syn then
+	syn.protect_gui(ControlsTitle)
+end
+local HorizontalSplit = Instance.new("Frame")
+if syn then
+	syn.protect_gui(HorizontalSplit)
+end
+local VerticalSplit = Instance.new("Frame")
+if syn then
+	syn.protect_gui(VerticalSplit)
+end
+local Unused = Instance.new("TextButton")
+if syn then
+	syn.protect_gui(Unused)
+end
+local Unused_2 = Instance.new("TextButton")
+if syn then
+	syn.protect_gui(Unused_2)
+end
+local Notification = Instance.new("TextButton")
+if syn then
+	syn.protect_gui(Notification)
+end
+local Notification2 = Instance.new("TextLabel")
+if syn then
+	syn.protect_gui(Notification2)
+end
+local UseRate = Instance.new("TextBox")
+if syn then
+	syn.protect_gui(UseRate)
+end
+local OnOff = Instance.new("TextButton")
+if syn then
+	syn.protect_gui(OnOff)
+end
+local doFatigueCheck = Instance.new("TextButton")
+if syn then
+	syn.protect_gui(doFatigueCheck)
+end
+
 ScreenGui.Parent = game:GetService("CoreGui")
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-local MainFrame = Instance.new("Frame")
-if syn then
-	syn.protect_gui(ScreenGui)
-end
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(56, 56, 56)
 MainFrame.BorderColor3 = Color3.fromRGB(38, 38, 38)
 MainFrame.BorderSizePixel = 4
-MainFrame.Position = UDim2.new(0.79854542, 0, 0.706395447, 0)
+MainFrame.Position = UDim2.new(0.795636296, 0, 0.597383857, 0)
 MainFrame.Size = UDim2.new(0, 254, 0, 175)
 
-local UseRate = Instance.new("TextBox")
-if syn then
-	syn.protect_gui(ScreenGui)
-end
-UseRate.Name = "UseRate"
-UseRate.Parent = MainFrame
-UseRate.BackgroundColor3 = Color3.fromRGB(74, 74, 74)
-UseRate.BorderColor3 = Color3.fromRGB(48, 48, 48)
-UseRate.BorderSizePixel = 4
-UseRate.Position = UDim2.new(0.027559055, 0, 0.655420899, 0)
-UseRate.Size = UDim2.new(0, 112, 0, 54)
-UseRate.Font = Enum.Font.SourceSans
-UseRate.Text = "0.01"
-UseRate.TextColor3 = Color3.fromRGB(0, 0, 0)
-UseRate.TextScaled = true
-UseRate.TextSize = 14.000
-UseRate.TextWrapped = true
+AutoEat.Name = "AutoEat"
+AutoEat.Parent = MainFrame
+AutoEat.BackgroundColor3 = Color3.fromRGB(74, 74, 74)
+AutoEat.BorderColor3 = Color3.fromRGB(48, 48, 48)
+AutoEat.BorderSizePixel = 4
+AutoEat.Position = UDim2.new(0.027559055, 0, 0.823588312, 0)
+AutoEat.Size = UDim2.new(0, 112, 0, 23)
+AutoEat.Font = Enum.Font.SourceSans
+AutoEat.Text = "Disabled"
+AutoEat.TextColor3 = Color3.fromRGB(0, 0, 0)
+AutoEat.TextScaled = true
+AutoEat.TextSize = 14.000
+AutoEat.TextWrapped = true
 
-local OnOff = Instance.new("TextButton")
-if syn then
-	syn.protect_gui(ScreenGui)
-end
-OnOff.Name = "On/Off"
-OnOff.Parent = MainFrame
-OnOff.BackgroundColor3 = Color3.fromRGB(74, 74, 74)
-OnOff.BorderColor3 = Color3.fromRGB(48, 48, 48)
-OnOff.BorderSizePixel = 4
-OnOff.Position = UDim2.new(0.027559055, 0, 0.283531755, 0)
-OnOff.Size = UDim2.new(0, 112, 0, 54)
-OnOff.Font = Enum.Font.SourceSans
-OnOff.Text = "Off"
-OnOff.TextColor3 = Color3.fromRGB(0, 0, 0)
-OnOff.TextScaled = true
-OnOff.TextSize = 14.000
-OnOff.TextWrapped = true
-
-local ToggleGuiKeybind = Instance.new("TextButton")
-if syn then
-	syn.protect_gui(ScreenGui)
-end
 ToggleGuiKeybind.Name = "ToggleGuiKeybind"
 ToggleGuiKeybind.Parent = MainFrame
 ToggleGuiKeybind.BackgroundColor3 = Color3.fromRGB(74, 74, 74)
@@ -101,10 +133,6 @@ ToggleGuiKeybind.Text = "ToggleGui("..keybindGui..")"
 ToggleGuiKeybind.TextColor3 = Color3.fromRGB(0, 0, 0)
 ToggleGuiKeybind.TextSize = 14.000
 
-local OnOffKeybind = Instance.new("TextButton")
-if syn then
-	syn.protect_gui(ScreenGui)
-end
 OnOffKeybind.Name = "On/Off Keybind"
 OnOffKeybind.Parent = MainFrame
 OnOffKeybind.BackgroundColor3 = Color3.fromRGB(74, 74, 74)
@@ -117,10 +145,6 @@ OnOffKeybind.Text = "On/Off("..keybindWorkout..")"
 OnOffKeybind.TextColor3 = Color3.fromRGB(0, 0, 0)
 OnOffKeybind.TextSize = 14.000
 
-local KeybindsTitle = Instance.new("TextLabel")
-if syn then
-	syn.protect_gui(ScreenGui)
-end
 KeybindsTitle.Name = "Keybinds Title"
 KeybindsTitle.Parent = MainFrame
 KeybindsTitle.BackgroundColor3 = Color3.fromRGB(74, 74, 74)
@@ -135,10 +159,6 @@ KeybindsTitle.TextScaled = true
 KeybindsTitle.TextSize = 14.000
 KeybindsTitle.TextWrapped = true
 
-local ControlsTitle = Instance.new("TextLabel")
-if syn then
-	syn.protect_gui(ScreenGui)
-end
 ControlsTitle.Name = "ControlsTitle"
 ControlsTitle.Parent = MainFrame
 ControlsTitle.BackgroundColor3 = Color3.fromRGB(74, 74, 74)
@@ -153,10 +173,6 @@ ControlsTitle.TextScaled = true
 ControlsTitle.TextSize = 14.000
 ControlsTitle.TextWrapped = true
 
-local HorizontalSplit = Instance.new("Frame")
-if syn then
-	syn.protect_gui(ScreenGui)
-end
 HorizontalSplit.Name = "HorizontalSplit"
 HorizontalSplit.Parent = MainFrame
 HorizontalSplit.BackgroundColor3 = Color3.fromRGB(38, 38, 38)
@@ -164,10 +180,6 @@ HorizontalSplit.BorderSizePixel = 0
 HorizontalSplit.Position = UDim2.new(0, 0, 0.22190927, 0)
 HorizontalSplit.Size = UDim2.new(0, 254, 0, 4)
 
-local VerticalSplit = Instance.new("Frame")
-if syn then
-	syn.protect_gui(ScreenGui)
-end
 VerticalSplit.Name = "VerticalSplit"
 VerticalSplit.Parent = MainFrame
 VerticalSplit.BackgroundColor3 = Color3.fromRGB(38, 38, 38)
@@ -175,10 +187,6 @@ VerticalSplit.BorderSizePixel = 0
 VerticalSplit.Position = UDim2.new(0.496062994, 0, 0, 0)
 VerticalSplit.Size = UDim2.new(0, 4, 0, 175)
 
-local Unused = Instance.new("TextButton")
-if syn then
-	syn.protect_gui(ScreenGui)
-end
 Unused.Name = "Unused"
 Unused.Parent = MainFrame
 Unused.BackgroundColor3 = Color3.fromRGB(74, 74, 74)
@@ -191,10 +199,6 @@ Unused.Text = "Unused"
 Unused.TextColor3 = Color3.fromRGB(0, 0, 0)
 Unused.TextSize = 14.000
 
-local Unused_2 = Instance.new("TextButton")
-if syn then
-	syn.protect_gui(ScreenGui)
-end
 Unused_2.Name = "Unused"
 Unused_2.Parent = MainFrame
 Unused_2.BackgroundColor3 = Color3.fromRGB(74, 74, 74)
@@ -207,9 +211,94 @@ Unused_2.Text = "Unused"
 Unused_2.TextColor3 = Color3.fromRGB(0, 0, 0)
 Unused_2.TextSize = 14.000
 
+Notification.Name = "Notification"
+Notification.Parent = MainFrame
+Notification.BackgroundColor3 = Color3.fromRGB(56, 56, 56)
+Notification.BorderColor3 = Color3.fromRGB(38, 38, 38)
+Notification.BorderSizePixel = 4
+Notification.Position = UDim2.new(0, 0, -0.285714298, 0)
+Notification.Size = UDim2.new(0, 254, 0, 50)
+Notification.Visible = false
+Notification.Font = Enum.Font.SourceSans
+Notification.TextColor3 = Color3.fromRGB(0, 0, 0)
+Notification.TextSize = 14.000
+Notification.TextScaled = true
+
+Notification2.Name = "Notification2"
+Notification2.Parent = Notification
+Notification2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Notification2.BackgroundTransparency = 1.000
+Notification2.Position = UDim2.new(0, 0, 0.751428545, 0)
+Notification2.Size = UDim2.new(0, 254, 0, 12)
+Notification2.Font = Enum.Font.SourceSans
+Notification2.Text = "Click to Close"
+Notification2.TextColor3 = Color3.fromRGB(0, 0, 0)
+Notification2.TextSize = 14.000
+
+UseRate.Name = "UseRate"
+UseRate.Parent = MainFrame
+UseRate.BackgroundColor3 = Color3.fromRGB(74, 74, 74)
+UseRate.BorderColor3 = Color3.fromRGB(48, 48, 48)
+UseRate.BorderSizePixel = 4
+UseRate.Position = UDim2.new(0.027559055, 0, 0.280054271, 0)
+UseRate.Size = UDim2.new(0, 112, 0, 24)
+UseRate.Font = Enum.Font.SourceSans
+UseRate.Text = "1"
+UseRate.TextColor3 = Color3.fromRGB(0, 0, 0)
+UseRate.TextScaled = true
+UseRate.TextSize = 14.000
+UseRate.TextWrapped = true
+
+OnOff.Name = "On/Off"
+OnOff.Parent = MainFrame
+OnOff.BackgroundColor3 = Color3.fromRGB(74, 74, 74)
+OnOff.BorderColor3 = Color3.fromRGB(48, 48, 48)
+OnOff.BorderSizePixel = 4
+OnOff.Position = UDim2.new(0.027559042, 0, 0.452159762, 0)
+OnOff.Size = UDim2.new(0, 112, 0, 23)
+OnOff.Font = Enum.Font.SourceSans
+OnOff.Text = "Workout: off"
+OnOff.TextColor3 = Color3.fromRGB(0, 0, 0)
+OnOff.TextScaled = true
+OnOff.TextSize = 14.000
+OnOff.TextWrapped = true
+
+doFatigueCheck.Name = "doFatigueCheck"
+doFatigueCheck.Parent = MainFrame
+doFatigueCheck.BackgroundColor3 = Color3.fromRGB(74, 74, 74)
+doFatigueCheck.BorderColor3 = Color3.fromRGB(48, 48, 48)
+doFatigueCheck.BorderSizePixel = 4
+doFatigueCheck.Position = UDim2.new(0.027559042, 0, 0.65215975, 0)
+doFatigueCheck.Size = UDim2.new(0, 112, 0, 23)
+doFatigueCheck.Font = Enum.Font.SourceSans
+doFatigueCheck.Text = "Fatigue Check: On"
+doFatigueCheck.TextColor3 = Color3.fromRGB(0, 0, 0)
+doFatigueCheck.TextScaled = true
+doFatigueCheck.TextSize = 14.000
+doFatigueCheck.TextWrapped = true
+
+local function notify(message)
+	Notification.Visible = true
+	Notification.Active = true
+	Notification.Text = message
+end
+
+local function CloseNotify()
+	Notification.Visible = false
+	Notification.Active = false
+end
+
 local function saveSettings()
 	writefile('mregui.txt', keybindGui.."\n")
 	appendfile('mregui.txt', keybindWorkout)
+end
+
+local function getFatigue()
+	return tonumber(string.match(player.PlayerGui:WaitForChild("MainGui").Utility:FindFirstChild("BodyFatigue").Text:sub(1, -2), '%S+$'))
+end
+
+local function getHunger()
+	
 end
 
 local function update(input)
@@ -219,12 +308,12 @@ end
 
 local function stopWorkout()
 	workout = false
-	OnOff.Text = "Off"
+	OnOff.Text = "Workout: Off"
 end
 
 local function startWorkout()
 	workout = true
-	OnOff.Text = "On"
+	OnOff.Text = "Workout: On"
 end
 
 local function ToggleWorkout()
@@ -232,6 +321,16 @@ local function ToggleWorkout()
 		stopWorkout()
 	else
 		startWorkout()
+	end
+end
+
+local function ToggleFatigueCheck()
+	if fatigueCheck == false then
+		doFatigueCheck.Text = "Fatigue Check: On"
+		fatigueCheck = true
+	else
+		doFatigueCheck.Text = "Fatigue Check: Off"
+		fatigueCheck = false
 	end
 end
 
@@ -305,6 +404,12 @@ UserInputService.InputBegan:connect(keyboardInput)
 
 OnOff.Activated:Connect(ToggleWorkout)
 
+doFatigueCheck.Activated:Connect(ToggleFatigueCheck)
+
+Notification.Activated:Connect(CloseNotify)
+
+--AutoEat.Activated:Connect(ToggleAutoEat)
+
 OnOffKeybind.Activated:Connect(changeOnOffKey)
 
 ToggleGuiKeybind.Activated:Connect(changeGuiKey)
@@ -340,13 +445,19 @@ while true do
 		local rate = UseRate.Text
 		if tonumber(rate) then
 			local tool = player.Character:FindFirstChildWhichIsA("Tool")
+			if fatigueCheck then
+				if getFatigue() > 70 then
+					stopWorkout()
+					notify("Your fatigue is too high, go rest!")
+				end
+			end
 			if stanim.Value >= 20 then
 				if tool then
 					tool:Activate()
-					wait(tonumber(rate)) -- (2.5 for pushup, 3 for squat) Change this value to wait longer between each click. 0.01 to do fast workouts, however long the workout you are training is for slow workouts
+					wait(tonumber(rate))
 				end
 			else
-				while stanim.Value <= 100 do -- change the value here to begin again at different stanima values
+				while stanim.Value <= 100 do
 					wait(0.01)
 				end
 			end
