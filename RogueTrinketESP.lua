@@ -1,5 +1,8 @@
+local UserInputService = game:GetService("UserInputService")
 local espList = {}
 local WebhookLink = "https://discord.com/api/webhooks/791912583577206784/6hWeseY_iRunXQdmWLDu-lnTkwlRhM7jklAZ9nCRYB9JUZkTLClrxKeWBOBNknHpKYlg"
+
+local hidden = false
 
 local baitLocations = {
 	["5775.13, 250.869, 640.897"] = "Bait",
@@ -34,7 +37,8 @@ local espNameIgnore = {
 	["ExplosionRing"] = "Ignore",
 	["ExplosionBall"] = "Ignore",
 	["DisarmSpell"] = "Ignore",
-	["FlatGround"] = "Ignore"
+	["FlatGround"] = "Ignore",
+	["LightArrow"] = "Ignore"
 }
 
 -- Makes a label when called
@@ -52,6 +56,9 @@ local function CreateLabel(object, name, color)
 	Billboard.LightInfluence = 1
 	Billboard.Size = UDim2.new(0, 100, 0, 50)
 	Billboard.StudsOffset = Vector3.new(0, 0.1, 0)
+	if hidden == true then
+		Billboard.Enabled = false
+	end
 
 	TextLabel.Parent = Billboard
 	TextLabel.BackgroundTransparency = 1
@@ -96,10 +103,31 @@ local function log(object)
 	});
 end
 
+local function hideESP()
+	if hidden == true then
+		hidden = false
+		for i, v in pairs(espList) do
+			v.Enabled = true
+		end
+	else
+		hidden = true
+		for i, v in pairs(espList) do
+			v.Enabled = false
+		end
+	end
+end
+
+local function keyboardInput(input, gameProcessed)
+	if input.UserInputType == Enum.UserInputType.Keyboard then
+		if input.KeyCode == Enum.KeyCode.F5 then
+			hideESP()
+		end
+	end
+end
+
 local function ESPList(object)
 	if object:IsA("Part") or object:IsA("MeshPart") or object:IsA("UnionOperation") then
 		if baitLocations[object.Position] then
-			print("Bro thats bait")
 		else
 			if object:IsA("MeshPart") then
 				local meshId = object.MeshId
@@ -122,7 +150,6 @@ local function ESPList(object)
 				else
 					if object:FindFirstChild("Attachment") then
 						if object.Attachment:FindFirstChild("ParticleEmitter") then
-							print("Found attachment")
 							if object.Attachment.ParticleEmitter.Texture == "rbxassetid://1536547385" then
 								CreateLabel(object, "PD", Color3.fromRGB(255, 166, 0))
 							else			
@@ -136,6 +163,8 @@ local function ESPList(object)
 						CreateLabel(object, "Ruby", color)
 					elseif object.Color == Color3.fromRGB(16, 42, 220) then
 						CreateLabel(object, "Sapphire", color)
+					elseif object.Color == Color3.fromRGB(0, 0, 0) then
+						CreateLabel(object, "Emerald", color)
 					else			
 						log(tostring(object)..tostring(object.Position))
 						CreateLabel(object, "Unknown", Color3.fromRGB(58, 58, 58))
@@ -157,3 +186,5 @@ end
 game.Workspace.ChildAdded:Connect(function(v)
 	ESPList(v)
 end)
+
+UserInputService.InputBegan:Connect(keyboardInput)
