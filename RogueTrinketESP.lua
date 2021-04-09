@@ -1,3 +1,4 @@
+_G.GlobalVariable = "bacawkgjbawg"
 local UserInputService = game:GetService("UserInputService")
 local espList = {}
 local WebhookLink = "https://discord.com/api/webhooks/791912583577206784/6hWeseY_iRunXQdmWLDu-lnTkwlRhM7jklAZ9nCRYB9JUZkTLClrxKeWBOBNknHpKYlg"
@@ -27,21 +28,17 @@ local colorList = {
 	["Scroll"] = Color3.fromRGB(255, 166, 0)
 }
 
-local espNameIgnore = {
-	["SolanSpawn"] = "Ignore",
-	["WorldEater"] = "Ignore",
-	["PurgatorySpawn"] = "Ignore",
-	["SpawnLocation"] = "Ignore",
-	["DragonWing"] = "Ignore",
-	["SmokeParticle"] = "Ignore",
-	["ExplosionRing"] = "Ignore",
-	["ExplosionBall"] = "Ignore",
-	["DisarmSpell"] = "Ignore",
-	["FlatGround"] = "Ignore",
-	["LightArrow"] = "Ignore"
+local gems = {
+	[Color3.fromRGB(248, 248, 248)] = "Opal",
+	[Color3.fromRGB(255, 0, 0)] = "Ruby",
+	[Color3.fromRGB(16, 42, 220)] = "Sapphire",
+	[Color3.fromRGB(0, 184, 49)] = "Emerald"
 }
 
--- Makes a label when called
+function roundNumber(num, numDecimalPlaces)
+	return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+end
+
 local function CreateLabel(object, name, color)
 	local Billboard = Instance.new("BillboardGui")
 	syn.protect_gui(Billboard)
@@ -82,25 +79,39 @@ local function CreateLabel(object, name, color)
 	end)
 end
 
-local function log(object)
-	local Message = {
-		["embeds"] = {
-			{
-				["title"] = "Found Unknown Item",
-				["description"] = tostring(object),
-				["color"] = 16711680,
+local function log(object, meshId, color)
+	if tostring(object) == "Part" then
+		local msg
+		local r = roundNumber(tonumber(color.r)*255, 0)
+		local g = roundNumber(tonumber(color.g)*255, 0)
+		local b = roundNumber(tonumber(color.b)*255, 0)
+		color = r.."   "..g.."   "..b
+		if meshId ~= "No mesh" then
+			msg = tostring(object).."    "..color.."    "..tostring(meshId)
+		else
+			msg = tostring(object).."    "..color
+		end
+		
+		
+		local Message = {
+			["embeds"] = {
+				{
+					["title"] = "Found Unknown Item",
+					["description"] = msg,
+					["color"] = 16711680,
+				}
 			}
 		}
-	}
 
-	syn.request({
-		Url = tostring(WebhookLink),
-		Method = 'POST',
-		Headers = {
-			['Content-Type'] = 'application/json'
-		},
-		Body = game:GetService('HttpService'):JSONEncode(Message)
-	});
+		syn.request({
+			Url = tostring(WebhookLink),
+			Method = 'POST',
+			Headers = {
+				['Content-Type'] = 'application/json'
+			},
+			Body = game:GetService('HttpService'):JSONEncode(Message)
+		});
+	end
 end
 
 local function hideESP()
@@ -117,13 +128,7 @@ local function hideESP()
 	end
 end
 
-local function keyboardInput(input, gameProcessed)
-	if input.UserInputType == Enum.UserInputType.Keyboard then
-		if input.KeyCode == Enum.KeyCode.F5 then
-			hideESP()
-		end
-	end
-end
+
 
 local function ESPList(object)
 	if object:IsA("Part") or object:IsA("MeshPart") or object:IsA("UnionOperation") then
@@ -140,39 +145,31 @@ local function ESPList(object)
 					CreateLabel(object, name, color)
 				else
 					if not meshId == "rbxassetid://520445343" then
-						log(meshId)
+						log(object, object.MeshId, object.Color)
 						CreateLabel(object, "Unknown", Color3.fromRGB(58, 58, 58))
 					end
 				end
 			elseif object:IsA("Part") then
-				local color = object.Color
-				if espNameIgnore[object.Name] then
-				else
-					if object:FindFirstChild("Attachment") then
-						if object.Attachment:FindFirstChild("ParticleEmitter") then
-							if object.Attachment.ParticleEmitter.Texture == "rbxassetid://1536547385" then
-								CreateLabel(object, "PD", Color3.fromRGB(255, 166, 0))
-							else			
-								log(tostring(object)..tostring(object.Position))
-								CreateLabel(object, "Unknown", Color3.fromRGB(58, 58, 58))
-							end
+				if object:FindFirstChild("Attachment") then
+					if object.Attachment:FindFirstChild("ParticleEmitter") then
+						if object.Attachment.ParticleEmitter.Texture == "rbxassetid://1536547385" then
+							CreateLabel(object, "PD", Color3.fromRGB(255, 166, 0))
+						else			
+							log(object, "No mesh", object.Color)
+							CreateLabel(object, "Unknown", Color3.fromRGB(58, 58, 58))
 						end
-					elseif object.Color == Color3.fromRGB(248, 248, 248) then
-						CreateLabel(object, "Opal", color)
-					elseif object.Color == Color3.fromRGB(255, 0, 0) then
-						CreateLabel(object, "Ruby", color)
-					elseif object.Color == Color3.fromRGB(16, 42, 220) then
-						CreateLabel(object, "Sapphire", color)
-					elseif object.Color == Color3.fromRGB(0, 0, 0) then
-						CreateLabel(object, "Emerald", color)
-					else			
-						log(tostring(object)..tostring(object.Position))
-						CreateLabel(object, "Unknown", Color3.fromRGB(58, 58, 58))
 					end
+				elseif gems[object.Color] then
+					CreateLabel(object, gems[object.Color], object.Color)
+				else
+					log(object, "No mesh", object.Color)
+					CreateLabel(object, "Unknown", Color3.fromRGB(58, 58, 58))
 				end
 			elseif object:IsA("UnionOperation") then
 				if object.Color == Color3.fromRGB(111, 113, 125) then
 					CreateLabel(object, "Idol of the Forgotten", object.Color)
+				else
+					log(object, "No mesh", object.Color)
 				end
 			end
 		end
@@ -187,4 +184,3 @@ game.Workspace.ChildAdded:Connect(function(v)
 	ESPList(v)
 end)
 
-UserInputService.InputBegan:Connect(keyboardInput)
