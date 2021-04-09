@@ -20,7 +20,7 @@ Menu.Name = "Menu"
 Menu.Parent = Dropdown
 Menu.BackgroundColor3 = Color3.fromRGB(49, 49, 49)
 Menu.Position = UDim2.new(-0.00125549315, 0, 0.634418309, 0)
-Menu.Size = UDim2.new(0, 200, 0, 162)
+Menu.Size = UDim2.new(0, 200, 0, 232)
 
 local UICorner = Instance.new("UICorner")
 --syn.protect_gui(UICorner)
@@ -31,7 +31,7 @@ local PlayerESP = Instance.new("TextButton")
 PlayerESP.Name = "PlayerESP"
 PlayerESP.Parent = Menu
 PlayerESP.BackgroundColor3 = Color3.fromRGB(68, 68, 68)
-PlayerESP.Position = UDim2.new(0.0650000051, 0, 0.154077739, 0)
+PlayerESP.Position = UDim2.new(0.0650000051, 0, 0.0980432555, 0)
 PlayerESP.Size = UDim2.new(0, 76, 0, 50)
 PlayerESP.Font = Enum.Font.SourceSans
 PlayerESP.Text = "Player ESP"
@@ -51,7 +51,7 @@ local FullBright = Instance.new("TextButton")
 FullBright.Name = "Full Bright"
 FullBright.Parent = Menu
 FullBright.BackgroundColor3 = Color3.fromRGB(68, 68, 68)
-FullBright.Position = UDim2.new(0.0650000051, 0, 0.576780379, 0)
+FullBright.Position = UDim2.new(0.0650000051, 0, 0.387125194, 0)
 FullBright.Size = UDim2.new(0, 76, 0, 50)
 FullBright.Font = Enum.Font.SourceSans
 FullBright.Text = "Full Bright"
@@ -71,7 +71,7 @@ local TrinketESP = Instance.new("TextButton")
 TrinketESP.Name = "TrinketESP"
 TrinketESP.Parent = Menu
 TrinketESP.BackgroundColor3 = Color3.fromRGB(68, 68, 68)
-TrinketESP.Position = UDim2.new(0.549651265, 0, 0.157230437, 0)
+TrinketESP.Position = UDim2.new(0.549651265, 0, 0.101195954, 0)
 TrinketESP.Size = UDim2.new(0, 76, 0, 50)
 TrinketESP.Font = Enum.Font.SourceSans
 TrinketESP.Text = "Trinket ESP"
@@ -91,7 +91,7 @@ local NoFog = Instance.new("TextButton")
 NoFog.Name = "NoFog"
 NoFog.Parent = Menu
 NoFog.BackgroundColor3 = Color3.fromRGB(68, 68, 68)
-NoFog.Position = UDim2.new(0.550465107, 0, 0.581016779, 0)
+NoFog.Position = UDim2.new(0.550465107, 0, 0.391361594, 0)
 NoFog.Size = UDim2.new(0, 76, 0, 50)
 NoFog.Font = Enum.Font.SourceSans
 NoFog.Text = "No Fog"
@@ -130,6 +130,46 @@ local UICorner_7 = Instance.new("UICorner")
 --syn.protect_gui(UICorner_7)
 UICorner_7.Parent = Dropdown
 
+local WeaponESP = Instance.new("TextButton")
+--syn.protect_gui(Selection)
+WeaponESP.Name = "WeaponESP"
+WeaponESP.Parent = Menu
+WeaponESP.BackgroundColor3 = Color3.fromRGB(68, 68, 68)
+WeaponESP.Position = UDim2.new(0.0650000051, 0, 0.679939806, 0)
+WeaponESP.Size = UDim2.new(0, 76, 0, 50)
+WeaponESP.Font = Enum.Font.SourceSans
+WeaponESP.Text = "Weapon ESP"
+WeaponESP.TextColor3 = Color3.fromRGB(103, 103, 103)
+WeaponESP.TextScaled = true
+WeaponESP.TextSize = 14.000
+WeaponESP.TextStrokeColor3 = Color3.fromRGB(38, 38, 38)
+WeaponESP.TextStrokeTransparency = 0.000
+WeaponESP.TextWrapped = true
+
+local UICorner_8 = Instance.new("UICorner")
+--syn.protect_gui(UICorner_7)
+UICorner_8.Parent = WeaponESP
+
+local Unused = Instance.new("TextButton")
+--syn.protect_gui(Selection)
+Unused.Name = "Unused"
+Unused.Parent = Menu
+Unused.BackgroundColor3 = Color3.fromRGB(68, 68, 68)
+Unused.Position = UDim2.new(0.549651265, 0, 0.683092475, 0)
+Unused.Size = UDim2.new(0, 76, 0, 50)
+Unused.Font = Enum.Font.SourceSans
+Unused.Text = "Unused"
+Unused.TextColor3 = Color3.fromRGB(103, 103, 103)
+Unused.TextScaled = true
+Unused.TextSize = 14.000
+Unused.TextStrokeColor3 = Color3.fromRGB(38, 38, 38)
+Unused.TextStrokeTransparency = 0.000
+Unused.TextWrapped = true
+
+local UICorner_9 = Instance.new("UICorner")
+--syn.protect_gui(UICorner_7)
+UICorner_9.Parent = Unused
+
 local dragging
 local dragInput
 local dragStart
@@ -166,9 +206,10 @@ UserInputService.InputChanged:Connect(function(input)
 end)
 
 local open = true
+local defSize = Menu.Size
 Selection.MouseButton1Click:Connect(function()
 	if not open then
-		Menu:TweenSize(UDim2.new(0, 200,0, 162), "Out", "Sine", 0.25, true)
+		Menu:TweenSize(defSize, "Out", "Sine", 0.25, true)
 		for _, button in pairs(Menu:GetChildren()) do
 			if button:IsA("TextButton") then
 				button.Active = true
